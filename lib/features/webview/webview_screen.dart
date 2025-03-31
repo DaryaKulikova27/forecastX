@@ -78,11 +78,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
       body: SafeArea(
         top: true,
         bottom: true,
-        child: Stack(
-          children: [
-            WebViewWidget(controller: _controller),
-            if (_isLoading) const Center(child: AppLoader()),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 84), // Add padding here
+          child: Stack(
+            children: [
+              WebViewWidget(controller: _controller),
+              if (_isLoading) const Center(child: AppLoader()),
+            ],
+          ),
         ),
       ),
     );

@@ -24,45 +24,64 @@ class _CoreScaffoldState extends State<CoreScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.body,
-      bottomNavigationBar: widget.showBottomNavBar &&
-              widget.navigationShell != null
-          ? Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                color: AppColors.dark,
+      body: Stack(
+        children: [
+          widget.body,
+          if (widget.showBottomNavBar && widget.navigationShell != null)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.dark,
+                  borderRadius: BorderRadius.circular(24),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: BottomNavigationBar(
+                    currentIndex: widget.navigationShell!.currentIndex,
+                    onTap: (index) => widget.navigationShell!.goBranch(index),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    selectedItemColor: AppColors.primacy,
+                    unselectedItemColor: AppColors.white,
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    type: BottomNavigationBarType.fixed,
+                    items: [
+                      _buildNavItem(
+                        iconPath: 'assets/images/svg/nav_bar_forecasts.svg',
+                        label: 'Прогнозы',
+                        isActive: widget.navigationShell!.currentIndex == 0,
+                      ),
+                      _buildNavItem(
+                        iconPath: 'assets/images/svg/nav_bar_rates.svg',
+                        label: 'Ставки',
+                        isActive: widget.navigationShell!.currentIndex == 1,
+                      ),
+                      _buildNavItem(
+                        iconPath: 'assets/images/svg/nav_bar_chat.svg',
+                        label: 'Чат',
+                        isActive: widget.navigationShell!.currentIndex == 2,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 0),
-              child: BottomNavigationBar(
-                currentIndex: widget.navigationShell!.currentIndex,
-                onTap: (index) => widget.navigationShell!.goBranch(index),
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                selectedItemColor: AppColors.primacy,
-                unselectedItemColor: AppColors.white,
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                type: BottomNavigationBarType.fixed,
-                items: [
-                  _buildNavItem(
-                    iconPath: 'assets/images/svg/nav_bar_forecasts.svg',
-                    label: 'Прогнозы',
-                    isActive: widget.navigationShell!.currentIndex == 0,
-                  ),
-                  _buildNavItem(
-                    iconPath: 'assets/images/svg/nav_bar_rates.svg',
-                    label: 'Ставки',
-                    isActive: widget.navigationShell!.currentIndex == 1,
-                  ),
-                  _buildNavItem(
-                    iconPath: 'assets/images/svg/nav_bar_chat.svg',
-                    label: 'Чат',
-                    isActive: widget.navigationShell!.currentIndex == 2,
-                  ),
-                ],
-              ),
-            )
-          : null,
+            ),
+        ],
+      ),
     );
   }
 
